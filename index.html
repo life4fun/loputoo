@@ -1,0 +1,45 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Shopping list</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+
+</head>
+<body ng-app="editer" class="ng-scope">
+<div class="container" id="main">
+<div class="text-center">
+<button class="link" onclick="reloadPage()"><h2>Shopping List</h2></button>
+</div>
+
+<div ng-controller="MainCtrl">
+	<form class="form-group" ng-submit="addTask()">
+        <input type="text" class ="form-control" ng-model="taskDescription" placeholder="What is need to be bought" autofocus>  <br /> 
+		<input class="btn btn-primary btn-group-justified" type="submit" value="ADD TO LIST" />
+    </form>	
+	 <ul class="table-view">     	 
+     <li class="table-view-cell" ng-repeat="task in tasks | orderBy:'_id':true track by $index "  ng-dblclick="startEditing(task);"> 
+		  <input type="checkbox" ng-model="task.done" ng-checked="master" ng-click="updateTask(task)">
+          <span class="done-{{task.done}}" ng-hide="task.editing">[{{task._id | date:'EEE, HH:mm'}}]		{{task.text}}</span> 
+		  <button type="button" class="btn btn-mini btn-warning" ng-click="startEditing(task);">
+		    <span class="glyphicon glyphicon-pencil"></span> Edit
+		  </button>
+		  
+		  
+	  <form ng-submit="doneEditing(task)" ng-show="task.editing">
+		<input ng-model="task.text" ng-blur="doneEditing(task)" ng-enter="updateTask()" class="" ng-focus="task == editedTask">
+	  </form>    
+     </li>             
+    </ul>	
+	    <span class="remaining">{{remaining()}} of {{tasks.length}} remaining</span>	
+		<a class="btn btn-mini btn-danger" ng-click="removeDone()" href="#">Remove Selected <span class="glyphicon glyphicon-remove"></span></a>
+</div>
+
+
+	</div>
+		<script src="js/angular.min.js"></script>
+		<script type="text/javascript" src="js/pouchdb-2.2.3.min.js"></script>
+		<script type="text/javascript" src="js/shoppingCtrl.js"></script>
+</body>
+</html>
